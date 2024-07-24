@@ -15,12 +15,19 @@ const VoiceInput = () => {
             return;
         }
         setShowAlert(false);
-        isListening ? stopVoiceinput() : startListening();
+    
+        if (!isListening) {
+            startListening();
+        } else {
+            stopVoiceinput();
+        }
     };
 
     const stopVoiceinput = () => {
-        setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''));
-        stopListening();
+        if (isListening) {
+            setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''));
+            stopListening();
+        }
     };
 
     const handleFontSizeChange = (event) => {
