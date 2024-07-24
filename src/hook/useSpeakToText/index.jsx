@@ -4,51 +4,40 @@ const useSpeakToText = (options = {}) => {
     const [isListening, setIsListening] = useState(false);
     const [transcript, setTranscript] = useState("");
     const recognitionRef = useRef(null);
-    const recognitionEndRef = useRef(true);
 
     useEffect(() => {
         if (!("webkitSpeechRecognition" in window)) {
-            console.error("Web speech api is not supported.");
+            console.error("Web Speech API is not supported in this browser.");
             return;
         }
 
         recognitionRef.current = new window.webkitSpeechRecognition();
         const recognition = recognitionRef.current;
-        recognition.interimResults = options.interimResults || true;
+        recognition.interimResults = options.interimResults || false;
         recognition.lang = options.lang || "th-TH";
         recognition.continuous = options.continuous || false;
 
-        if ("webkitSpeechRecognition" in window) {
-            const grammar = "#JSGF V1.0; grammar punctuation; public <punc> = . | , | ? | ! | ; | : ;";
-            const speechRecognitionList = new window.webkitSpeechGrammarList();
-            speechRecognitionList.addFromString(grammar, 1);
-            recognition.grammars = speechRecognitionList;
-        }
-
-        recognition.onstart = () => {
-            recognitionEndRef.current = false;
-        };
-
         recognition.onresult = (event) => {
-            let text = "";
+            let finalTranscript = "";
             for (let i = 0; i < event.results.length; i++) {
                 if (event.results[i].isFinal) {
-                    text += event.results[i][0].transcript;
+                    finalTranscript += event.results[i][0].transcript;
                 }
             }
-            setTranscript(text);
+            setTranscript(finalTranscript);
+        };
+
+        recognition.onstart = () => {
+            setIsListening(true);
         };
 
         recognition.onerror = (event) => {
             console.error("Speech recognition error:", event.error);
             setIsListening(false);
-            recognitionEndRef.current = true;
         };
 
         recognition.onend = () => {
             setIsListening(false);
-            setTranscript("");
-            recognitionEndRef.current = true;
         };
 
         return () => {
@@ -58,15 +47,14 @@ const useSpeakToText = (options = {}) => {
 
     const startListening = () => {
         if (recognitionRef.current && !isListening) {
+            setTranscript(""); // Reset transcript
             recognitionRef.current.start();
-            setIsListening(true);
         }
     };
 
     const stopListening = () => {
         if (recognitionRef.current && isListening) {
             recognitionRef.current.stop();
-            setIsListening(false);
         }
     };
 

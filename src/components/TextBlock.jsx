@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useSpeakToText from "../hook/useSpeakToText";
 import Alert from 'react-bootstrap/Alert';
 
@@ -8,6 +8,13 @@ const VoiceInput = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     const { isListening, transcript, startListening, stopListening } = useSpeakToText({ continuous: true, lang: "th-TH" });
+
+    useEffect(() => {
+        if (!isListening && transcript) {
+            setTextInput(prevText => prevText + " " + transcript);
+        }
+    }, [isListening, transcript]);
+
 
     const startStopListening = () => {
         if (fontSize === '') {
@@ -19,16 +26,16 @@ const VoiceInput = () => {
         if (!isListening) {
             startListening();
         } else {
-            stopVoiceinput();
-        }
-    };
-
-    const stopVoiceinput = () => {
-        if (isListening) {
-            setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''));
             stopListening();
         }
     };
+
+    //const stopVoiceinput = () => {
+        //if (isListening) {
+            //setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''));
+            //stopListening();
+        //}
+    //};
 
     const handleFontSizeChange = (event) => {
         setFontSize(event.target.value);
