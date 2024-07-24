@@ -36,7 +36,6 @@ footer p {
   color: #f8f8f8;
 }
 
-/* styles.css */
 .text-container {
   display: block;
   margin: 0 auto;
@@ -172,6 +171,7 @@ footer p {
 
   .font-size-select {
     text-align: center;
+    padding: 10px 20px;
   }
 
   .button-container button,
