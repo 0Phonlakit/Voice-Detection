@@ -36,11 +36,16 @@ const useSpeakToText = (options = {}) => {
 
         recognition.onerror = (event) => {
             console.error("Speech recognition error:", event.error);
+            
+            if (event.error === 'no-speech' || event.error === 'network') {
+                recognition.start();
+            }
         };
 
         recognition.onend = () => {
             setIsListening(false);
             setTranscript("");
+            recognition.start();
         };
 
         return () => {
