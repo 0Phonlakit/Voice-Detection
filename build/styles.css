@@ -141,15 +141,6 @@ footer p {
   .button-container select {
     width: 100%;
   }
-
-  footer {
-    height: 7.5rem;
-  }
-  
-  footer p {
-    margin-top: 45px;
-    font-size: 20px;
-  }
 }
 
 @media (min-width: 481px) and (max-width : 1200px) {
@@ -187,14 +178,5 @@ footer p {
   .button-container button,
   .button-container select {
     width: 100%;
-  }
-
-  footer {
-    height: 7.5rem;
-  }
-  
-  footer p {
-    margin-top: 45px;
-    font-size: 20px;
   }
 }
