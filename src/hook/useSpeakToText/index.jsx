@@ -4,6 +4,7 @@ const useSpeakToText = (options = {}) => {
     const [isListening, setIsListening] = useState(false);
     const [transcript, setTranscript] = useState("");
     const recognitionRef = useRef(null);
+    const recognitionEndRef = useRef(true);
 
     useEffect(() => {
         if (!("webkitSpeechRecognition" in window)) {
@@ -24,6 +25,10 @@ const useSpeakToText = (options = {}) => {
             recognition.grammars = speechRecognitionList;
         }
 
+        recognition.onstart = () => {
+            recognitionEndRef.current = false;
+        };
+
         recognition.onresult = (event) => {
             let text = "";
             for (let i = 0; i < event.results.length; i++) {
@@ -37,11 +42,13 @@ const useSpeakToText = (options = {}) => {
         recognition.onerror = (event) => {
             console.error("Speech recognition error:", event.error);
             setIsListening(false);
+            recognitionEndRef.current = true;
         };
 
         recognition.onend = () => {
             setIsListening(false);
-            //setTranscript("");
+            setTranscript("");
+            recognitionEndRef.current = true;
         };
 
         return () => {
