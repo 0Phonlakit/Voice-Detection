@@ -41,7 +41,7 @@ const useSpeakToText = (options = {}) => {
 
         recognition.onend = () => {
             setIsListening(false);
-            setTranscript("");
+            //setTranscript("");
         };
 
         return () => {
