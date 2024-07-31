@@ -6,7 +6,7 @@
 This website serves as a learning project demonstrating the integration of React JS with the Web Speech API. Its primary focus is on speech-to-text functionality, enabling users to communicate through voice input which is then transcribed into text.
 
 ## How to use and what you need
-* The index.js file uses two main libraries:
+* The index.js file uses one main libraries:
    * **Alert**: A library facilitating straightforward user notifications.
 
 * To use the website, you will need the following:
